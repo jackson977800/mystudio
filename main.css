@@ -1,0 +1,87 @@
+/* My Reset CSS */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'IBM Plex Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: #28262e;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+p, span {
+    color: #999591;
+    font-weight: 400 ;
+}
+
+span {
+    margin-top: 30px;
+}
+
+strong {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+/*Avatar styles*/
+img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.avatar {
+    width: 180px;
+    border-radius: 50%;
+    border: 6px #3e3b47 solid;
+    transition: 1s;
+}
+
+/*Container styles*/
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/*Card styles*/
+.card{
+    margin: 10px 0;
+    min-width: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #f4ede8;
+    border-radius: 5px;
+    background-color: #f4ede8;
+    transition: .5s;
+}
+
+.card:hover {
+    background:#fff;
+    transform: scale(1.1)
+}
+
+.card p, i {
+    color: #28262e;
+    padding: 5px;
+    font-weight: 500;
+}
+
+
+/*duration time to transition*/
+#instagram {
+    --animate-duration: 1.2s;
+}
