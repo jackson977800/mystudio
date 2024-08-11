@@ -1,188 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>79 Ling's Hair Studio</title>
     <link rel="stylesheet" href="main.css" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
     />
     <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <script
-      src="https://kit.fontawesome.com/baadd8f5f8.js"
-      crossorigin="anonymous"
+        src="https://kit.fontawesome.com/baadd8f5f8.js"
+        crossorigin="anonymous"
     ></script>
     <style>
-      .business-hours {
-        background: #007bff; /* 默认青色 */
-        color: #ffffff; /* 白色文字 */
-        border-radius: 12px;
-        padding: 20px;
-        margin: 20px auto;
-        max-width: 400px;
-        text-align: center;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        border: 1px solid #0056b3; /* 边框颜色略深 */
-      }
-      .business-hours.closed {
-        background: #ff0000; /* 红色 */
-        border: 1px solid #cc0000; /* 深红色边框 */
-      }
-      .business-hours.about-to-close {
-        background: #ff9900; /* 橙色 */
-        border: 1px solid #cc7a00; /* 深橙色边框 */
-      }
-      .business-hours h2 {
-        margin: 0 0 10px;
-        font-size: 1.6em;
-        color: #ffffff; /* 白色文字 */
-      }
-      .business-hours p {
-        margin: 0;
-        font-size: 1.2em;
-        color: #ffffff; /* 白色文字 */
-        font-weight: 500;
-      }
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff; /* White background for cards */
+            color: #333333; /* Dark gray text */
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px;
+            text-decoration: none;
+            border: 1px solid #ccc; /* Light gray border */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .card i {
+            margin-right: 8px; /* Space between icon and text */
+            font-size: 1.5em; /* Adjust icon size */
+        }
+
+        .card:hover {
+            background: #f0f0f0; /* Light gray background on hover */
+            color: #000000; /* Black text on hover */
+        }
+
+        .business-hours {
+            background: #f0f0f0; /* Gray background */
+            color: #333333; /* Dark gray text */
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ccc; /* Light gray border */
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .business-hours.closed {
+            background: #ffcccc; /* Light red background for closed status */
+            color: #ff0000; /* Red text */
+        }
+
+        .business-hours h2 {
+            margin: 0 0 10px;
+            font-size: 1.5em; /* Slightly smaller */
+            color: #333333;
+        }
+
+        .business-hours p {
+            margin: 0;
+            font-size: 1.2em; /* Slightly smaller */
+            color: #333333;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #f0f0f0; /* Gray background */
+            color: #333333;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #ccc; /* Light gray border */
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
+            overflow: auto; /* Ensure the content can scroll if it overflows */
+        }
+
+        .close {
+            color: #333333;
+            float: right;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ff0000;
+        }
+
+        .weekly-hours {
+            margin-top: 10px;
+            text-align: left;
+            font-family: 'IBM Plex Mono', monospace; /* Monospaced font for alignment */
+        }
+
+        .weekly-hours p {
+            font-size: 1em; /* Responsive text size */
+            color: #000000; /* Black text */
+            margin: 0;
+            white-space: normal; /* Allow text to wrap */
+            overflow-wrap: break-word; /* Prevent overflow and break long words */
+        }
+
+        .weekly-hours .day-time {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .weekly-hours .note {
+            margin-top: 10px;
+            font-style: italic;
+            color: #ff0000; /* Red text for emphasis */
+            white-space: normal; /* Allow text to wrap */
+            overflow-wrap: break-word; /* Ensure long words wrap properly */
+        }
+
+        @media (max-width: 600px) {
+            .business-hours h2 {
+                font-size: 1.3em;
+            }
+
+            .business-hours p {
+                font-size: 1em;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <header class="animate__animated animate__fadeIn">
-      <div class="avatar">
-        <img src="logo.jpg" alt="79 Ling's Hair Studio" />
-      </div>
-      <h1>79 Ling's Hair Studio</h1>
-      <p>Hair salon in Miri</p>
+        <div class="avatar">
+            <img src="logo.jpg" alt="79 Ling's Hair Studio" />
+        </div>
+        <h1>79 Ling's Hair Studio</h1>
+        <p>Hair salon in Miri</p>
     </header>
     <main class="animate__animated animate__fadeIn">
-      <a
-        id="whatsapp"
-        class="animate__animated animate__bounce animate__faster card"
-        href="https://api.whatsapp.com/send?phone=601111132028"
-        target="_blank"
-      >
-        <i class="fa-brands fa-whatsapp"></i>
-        Whatsapp
-      </a>
-      <a
-        id="facebook"
-        class="card animate__animated animate__bounce animate__fast"
-        href="https://www.facebook.com/profile.php?id=61560767513221"
-        target="_blank"
-        data-card
-      >
-        <i class="fab fa-facebook"></i>
-        Facebook
-      </a>
-      <a
-        id="Google Map"
-        class="card animate__animated animate__bounce animate_slower"
-        href="https://maps.app.goo.gl/itrqx5xVy4TpyjzL9"
-        target="_blank"
-        data-card
-      >
-        <i class="fa-solid fa-location-dot"></i>
-        Google Map
-      </a>
-      
-      <!-- Business Hours Section -->
-      <div class="business-hours" id="business-hours">
-        <h2>Business Hours</h2>
-        <p id="hours-info">Loading...</p>
-      </div>
+        <a
+            id="whatsapp"
+            class="animate__animated animate__bounce animate__faster card"
+            href="https://api.whatsapp.com/send?phone=601111132028"
+            target="_blank"
+        >
+            <i class="fa-brands fa-whatsapp"></i>
+            Whatsapp
+        </a>
+        <a
+            id="facebook"
+            class="card animate__animated animate__bounce animate__fast"
+            href="https://www.facebook.com/profile.php?id=61560767513221"
+            target="_blank"
+            data-card
+        >
+            <i class="fab fa-facebook"></i>
+            Facebook
+        </a>
+        <a
+            id="Google Map"
+            class="card animate__animated animate__bounce animate_slower"
+            href="https://maps.app.goo.gl/itrqx5xVy4TpyjzL9"
+            target="_blank"
+            data-card
+        >
+            <i class="fa-solid fa-location-dot"></i>
+            Location
+        </a>
+        
+        <!-- Business Hours Section -->
+        <div class="business-hours" id="business-hours">
+            <h2>Today’s business hours</h2>
+            <p id="hours-info">Loading...</p>
+        </div>
+        
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Weekly Business Hours</h2>
+                <div class="weekly-hours">
+                    <p class="day-time">Monday:    9:00 AM - 6:00 PM</p>
+                    <p class="day-time">Tuesday:   9:00 AM - 6:00 PM</p>
+                    <p class="day-time">Wednesday: 9:00 AM - 6:00 PM</p>
+                    <p class="day-time">Thursday:  9:00 AM - 6:00 PM</p>
+                    <p class="day-time">Friday:    9:00 AM - 6:00 PM</p>
+                    <p class="day-time">Saturday:  9:00 AM - 6:00 PM</p>
+                    <p class="day-time">Sunday:    10:00 AM - 3:30 PM</p>
+                    <p class="note">Note: Closed on the first Sunday of every month.</p>
+                </div>
+            </div>
+        </div>
     </main>
     <footer>
-      <p>Welcome to visit</p>
+        <p>Welcome to visit</p>
     </footer>
     <script>
-      function isPublicHoliday(date) {
-        const holidays = [
-          '01-01', // 新年
-          '02-01', // 某假日
-          // 其他假期
-        ];
-        const formattedDate = date.toISOString().slice(5, 10);
-        return holidays.includes(formattedDate);
-      }
+        function getBusinessHours(date) {
+            const dayOfWeek = date.getDay(); // 0 (Sunday) through 6 (Saturday)
+            const dayOfMonth = date.getDate();
 
-      function getBusinessHours(date) {
-        const dayOfWeek = date.getDay(); // 0 (Sunday) through 6 (Saturday)
-        const dayOfMonth = date.getDate();
+            if (isPublicHoliday(date)) {
+                return { closed: true, hours: 'Closed' };
+            }
 
-        if (isPublicHoliday(date)) {
-          return { closed: true, hours: 'Closed' };
+            if (dayOfWeek === 0) { // Sunday
+                if (dayOfMonth <= 7) { // 第一周的周日
+                    return { closed: true, hours: 'Closed' };
+                }
+                return { closed: false, hours: '10:00 AM - 3:30 PM' };
+            } else if (dayOfWeek >= 1 && dayOfWeek <= 6) { // Monday to Saturday
+                return { closed: false, hours: '9:00 AM - 6:00 PM' };
+            }
+
+            return { closed: false, hours: '10:00 AM - 3:30 PM' };
         }
 
-        if (dayOfWeek === 0) { // Sunday
-          if (dayOfMonth <= 7) { // 第一周的周日
-            return { closed: true, hours: 'Closed' };
-          }
-          return { closed: false, hours: { open: '10:00 AM', close: '3:00 PM' } };
-        } else if (dayOfWeek >= 1 && dayOfWeek <= 6) { // Monday to Saturday
-          return { closed: false, hours: { open: '9:00 AM', close: '6:00 PM' } };
+        function isPublicHoliday(date) {
+            const holidays = [
+                // Add public holidays here
+            ];
+            const formattedDate = date.toISOString().slice(5, 10);
+            return holidays.includes(formattedDate);
         }
 
-        return { closed: false, hours: { open: '10:00 AM', close: '3:00 PM' } };
-      }
+        function displayBusinessHours() {
+            const today = new Date();
+            const businessHours = getBusinessHours(today);
+            const hoursInfo = document.getElementById('hours-info');
+            const businessHoursDiv = document.getElementById('business-hours');
 
-      function isOpenNow(hours) {
-        const now = new Date();
-        const [openHour, openMinute] = hours.open.split(':');
-        const [closeHour, closeMinute] = hours.close.split(':');
+            // Reset class
+            businessHoursDiv.className = 'business-hours';
 
-        // 使用马来西亚时间
-        const timezoneOffset = 8 * 60; // Malaysia is UTC+8
-        const openTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(openHour), parseInt(openMinute));
-        openTime.setMinutes(openTime.getMinutes() + timezoneOffset - now.getTimezoneOffset());
-
-        let closeTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(closeHour), parseInt(closeMinute));
-        closeTime.setMinutes(closeTime.getMinutes() + timezoneOffset - now.getTimezoneOffset());
-
-        // 处理跨日情况
-        if (closeTime < openTime) {
-          closeTime.setDate(closeTime.getDate() + 1); // 结束时间在第二天
-          if (now < openTime) {
-            now.setDate(now.getDate() - 1); // 当前时间在前一天
-          }
+            if (businessHours.closed) {
+                hoursInfo.textContent = "Closed.";
+                businessHoursDiv.classList.add('closed');
+            } else {
+                hoursInfo.textContent = `${businessHours.hours}`;
+            }
         }
 
-        now.setMinutes(now.getMinutes() + timezoneOffset - now.getTimezoneOffset());
-
-        const aboutToCloseTime = new Date(closeTime.getTime());
-        aboutToCloseTime.setHours(closeTime.getHours() - 1); // 提前一小时
-
-        if (now >= openTime && now <= aboutToCloseTime) {
-          return { status: 'open', message: "We are open now." };
-        } else if (now > aboutToCloseTime && now <= closeTime) {
-          return { status: 'about-to-close', message: "We are about to close." };
-        } else {
-          return { status: 'closed', message: "We are closed now." };
-        }
-      }
-
-      function displayBusinessHours() {
-        const today = new Date();
-        const businessHours = getBusinessHours(today);
-        const hoursInfo = document.getElementById('hours-info');
+        // Modal functionality
+        const modal = document.getElementById('modal');
         const businessHoursDiv = document.getElementById('business-hours');
+        const closeButton = document.getElementsByClassName('close')[0];
 
-        if (businessHours.closed) {
-          hoursInfo.textContent = "Today is closed. Business hours: Closed.";
-          businessHoursDiv.classList.add('closed');
-        } else {
-          const currentStatus = isOpenNow(businessHours.hours);
-          hoursInfo.textContent = `${currentStatus.message} Today's business hours: ${businessHours.hours.open} to ${businessHours.hours.close}.`;
-          businessHoursDiv.classList.add(currentStatus.status);
-        }
-      }
+        businessHoursDiv.onclick = function() {
+            modal.style.display = 'block';
+        };
 
-      displayBusinessHours();
+        closeButton.onclick = function() {
+            modal.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Display business hours when the page loads
+        displayBusinessHours();
     </script>
-  </body>
+</body>
 </html>
