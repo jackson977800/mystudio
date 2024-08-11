@@ -70,6 +70,11 @@
             color: #ff0000; /* Red text */
         }
 
+        .business-hours.holiday {
+            background: #ffffcc; /* Light yellow background for holiday */
+            color: #ffcc00; /* Yellow text */
+        }
+
         .business-hours h2 {
             margin: 0 0 10px;
             font-size: 1.5em; /* Slightly smaller */
@@ -81,6 +86,7 @@
             font-size: 1.2em; /* Slightly smaller */
             color: #333333;
             font-weight: 500;
+            white-space: pre-wrap; /* Preserve whitespace */
         }
 
         .modal {
@@ -106,7 +112,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: background 0.3s ease;
-            overflow: auto; /* Ensure the content can scroll if it overflows */
+            overflow: auto; /* Add this to handle overflow */
         }
 
         .close {
@@ -132,8 +138,7 @@
             font-size: 1em; /* Responsive text size */
             color: #000000; /* Black text */
             margin: 0;
-            white-space: normal; /* Allow text to wrap */
-            overflow-wrap: break-word; /* Prevent overflow and break long words */
+            white-space: pre-wrap; /* Preserve whitespace and wrap text */
         }
 
         .weekly-hours .day-time {
@@ -146,8 +151,6 @@
             margin-top: 10px;
             font-style: italic;
             color: #ff0000; /* Red text for emphasis */
-            white-space: normal; /* Allow text to wrap */
-            overflow-wrap: break-word; /* Ensure long words wrap properly */
         }
 
         @media (max-width: 600px) {
@@ -232,72 +235,147 @@
         <p>Welcome to visit</p>
     </footer>
     <script>
-        function getBusinessHours(date) {
-            const dayOfWeek = date.getDay(); // 0 (Sunday) through 6 (Saturday)
-            const dayOfMonth = date.getDate();
+        // Define holidays for different years
+        const holidays2024 = [
+            { date: '01-01', name: "New Year's Day" },
+            { date: '02-10', name: "Chinese New Year" },
+            { date: '02-11', name: "Chinese New Year Holiday" },
+            { date: '02-12', name: "Chinese New Year Holiday" },
+            { date: '03-29', name: "Good Friday" },
+            { date: '04-10', name: "Hari Raya Aidilfitri" },
+            { date: '04-11', name: "Hari Raya Aidilfitri Holiday" },
+            { date: '05-01', name: "Labour Day" },
+            { date: '05-22', name: "Wesak Day" },
+            { date: '06-01', name: "Hari Gawai" },
+            { date: '06-02', name: "Hari Gawai Holiday" },
+            { date: '06-03', name: "Agong's Birthday" },
+            { date: '06-04', name: "Hari Gawai Holiday" },
+            { date: '06-17', name: "Hari Raya Haji" },
+            { date: '07-07', name: "Awal Muharram" },
+            { date: '07-08', name: "Awal Muharram Holiday" },
+            { date: '07-22', name: "Sarawak Day" },
+            { date: '08-31', name: "Merdeka Day" },
+            { date: '09-16', name: "Prophet Muhammad's Birthday" },
+            { date: '09-16', name: "Malaysia Day" },
+            { date: '10-12', name: "Sarawak Governor's Birthday" },
+            { date: '12-25', name: "Christmas Day" }
+        ];
 
-            if (isPublicHoliday(date)) {
-                return { closed: true, hours: 'Closed' };
-            }
+        const holidays2025 = [
+            { date: '01-01', name: "New Year's Day" },
+            { date: '01-29', name: "Chinese New Year" },
+            { date: '01-30', name: "Chinese New Year Holiday" },
+            { date: '03-31', name: "Hari Raya Aidilfitri" },
+            { date: '04-01', name: "Hari Raya Aidilfitri Holiday" },
+            { date: '04-18', name: "Good Friday" },
+            { date: '05-01', name: "Labour Day" },
+            { date: '05-12', name: "Wesak Day" },
+            { date: '06-01', name: "Hari Gawai" },
+            { date: '06-02', name: "Hari Gawai Holiday" },
+            { date: '06-02', name: "Agong's Birthday" },
+            { date: '06-03', name: "Agong's Birthday Holiday" },
+            { date: '06-07', name: "Hari Raya Haji" },
+            { date: '06-27', name: "Awal Muharram" },
+            { date: '07-22', name: "Sarawak Day" },
+            { date: '08-31', name: "Merdeka Day" },
+            { date: '09-01', name: "Merdeka Day Holiday" },
+            { date: '09-05', name: "Prophet Muhammad's Birthday" },
+            { date: '09-16', name: "Malaysia Day" },
+            { date: '10-11', name: "Sarawak Governor's Birthday" },
+            { date: '12-25', name: "Christmas Day" }
+        ];
 
-            if (dayOfWeek === 0) { // Sunday
-                if (dayOfMonth <= 7) { // 第一周的周日
-                    return { closed: true, hours: 'Closed' };
-                }
-                return { closed: false, hours: '10:00 AM - 3:30 PM' };
-            } else if (dayOfWeek >= 1 && dayOfWeek <= 6) { // Monday to Saturday
-                return { closed: false, hours: '9:00 AM - 6:00 PM' };
-            }
-
-            return { closed: false, hours: '10:00 AM - 3:30 PM' };
-        }
+        const holidays2026 = [
+            { date: '01-01', name: "New Year's Day" },
+            { date: '02-17', name: "Chinese New Year" },
+            { date: '02-18', name: "Chinese New Year Holiday" },
+            { date: '03-20', name: "Hari Raya Aidilfitri" },
+            { date: '03-21', name: "Hari Raya Aidilfitri Holiday" },
+            { date: '04-03', name: "Good Friday" },
+            { date: '05-01', name: "Labour Day" },
+            { date: '05-27', name: "Hari Raya Haji" },
+            { date: '05-31', name: "Wesak Day" },
+            { date: '06-01', name: "Hari Gawai" },
+            { date: '06-01', name: "Agong's Birthday" },
+            { date: '06-01', name: "Wesak Day Holiday" },
+            { date: '06-02', name: "Hari Gawai Holiday" },
+            { date: '06-16', name: "Awal Muharram" },
+            { date: '07-22', name: "Sarawak Day" },
+            { date: '08-25', name: "Prophet Muhammad's Birthday" },
+            { date: '08-31', name: "Merdeka Day" },
+            { date: '09-16', name: "Malaysia Day" },
+            { date: '10-10', name: "Sarawak Governor's Birthday" },
+            { date: '12-25', name: "Christmas Day" }
+        ];
 
         function isPublicHoliday(date) {
-            const holidays = [
-                // Add public holidays here
-            ];
             const formattedDate = date.toISOString().slice(5, 10);
-            return holidays.includes(formattedDate);
+            const year = date.getFullYear();
+
+            const holidays = year === 2024 ? holidays2024 :
+                             year === 2025 ? holidays2025 :
+                             year === 2026 ? holidays2026 : [];
+            
+            const holiday = holidays.find(h => h.date === formattedDate);
+            return holiday ? holiday.name : null;
         }
 
-        function displayBusinessHours() {
-            const today = new Date();
-            const businessHours = getBusinessHours(today);
-            const hoursInfo = document.getElementById('hours-info');
-            const businessHoursDiv = document.getElementById('business-hours');
+        function updateBusinessHours() {
+            const now = new Date();
+            const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][now.getDay()];
+            const businessHoursElement = document.getElementById('hours-info');
+            const businessHoursBox = document.getElementById('business-hours');
 
-            // Reset class
-            businessHoursDiv.className = 'business-hours';
+            const holidayName = isPublicHoliday(now);
 
-            if (businessHours.closed) {
-                hoursInfo.textContent = "Closed.";
-                businessHoursDiv.classList.add('closed');
+            if (holidayName) {
+                businessHoursElement.innerHTML = `${holidayName}<br>10:00 AM - 3:30 PM`;
+                businessHoursBox.classList.add('holiday');
             } else {
-                hoursInfo.textContent = `${businessHours.hours}`;
+                const openingHours = {
+                    'Monday': '9:00 AM - 6:00 PM',
+                    'Tuesday': '9:00 AM - 6:00 PM',
+                    'Wednesday': '9:00 AM - 6:00 PM',
+                    'Thursday': '9:00 AM - 6:00 PM',
+                    'Friday': '9:00 AM - 6:00 PM',
+                    'Saturday': '9:00 AM - 6:00 PM',
+                    'Sunday': '10:00 AM - 3:30 PM'
+                };
+                const isClosedToday = !openingHours[dayName];
+                if (isClosedToday) {
+                    businessHoursElement.textContent = 'Closed today';
+                    businessHoursBox.classList.add('closed');
+                } else {
+                    businessHoursElement.textContent = openingHours[dayName];
+                    businessHoursBox.classList.remove('closed');
+                }
             }
         }
 
-        // Modal functionality
-        const modal = document.getElementById('modal');
-        const businessHoursDiv = document.getElementById('business-hours');
-        const closeButton = document.getElementsByClassName('close')[0];
+        function setupModal() {
+            const modal = document.getElementById('modal');
+            const span = document.getElementsByClassName('close')[0];
+            const businessHoursBox = document.getElementById('business-hours');
 
-        businessHoursDiv.onclick = function() {
-            modal.style.display = 'block';
-        };
+            businessHoursBox.onclick = function() {
+                modal.style.display = 'block';
+            }
 
-        closeButton.onclick = function() {
-            modal.style.display = 'none';
-        };
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
+            span.onclick = function() {
                 modal.style.display = 'none';
             }
-        };
 
-        // Display business hours when the page loads
-        displayBusinessHours();
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBusinessHours();
+            setupModal();
+        });
     </script>
 </body>
 </html>
