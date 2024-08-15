@@ -21,7 +21,8 @@
   gtag('config', 'G-NJ5RV3M8S8');
 </script>
       <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link
+      
+    <link 
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
         rel="stylesheet"
     />
@@ -34,6 +35,61 @@
         crossorigin="anonymous"
     ></script>
     <style>
+    
+            .language-modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .language-modal-content {
+            background-color: #f0f0f0;
+            color: #333333;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .language-option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            color: #333333;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid #ccc;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .language-option:hover {
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+
+        .language-modal .close {
+            color: #333333;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            float: right;
+        }
+
+        .language-modal .close:hover,
+        .language-modal .close:focus {
+            color: #ff0000;
+        }
+        
         body {
             font-family: 'IBM Plex Mono', monospace;
             margin: 0;
@@ -194,12 +250,7 @@
         <p>Hair salon in Miri</p>
     </header>
     <main class="animate__animated animate__fadeIn">
-        <a
-            id="whatsapp"
-            class="animate__animated animate__bounce animate__faster card"
-            href="https://api.whatsapp.com/send?phone=601111132028"
-            target="_blank"
-        >
+     <a id="whatsapp" class="animate__animated animate__bounce animate__faster card" href="javascript:void(0);">
             <i class="fa-brands fa-whatsapp"></i>
             Whatsapp
         </a>
@@ -224,6 +275,15 @@
             Location
         </a>
         
+          <div id="language-modal" class="language-modal">
+            <div class="language-modal-content">
+                <span class="close">&times;</span>
+                <h2>Select Language</h2>
+                <a class="language-option" href="https://wa.me/601111132028?text=%E4%BD%A0%E5%A5%BD" target="_blank">中文</a>
+                <a class="language-option" href="https://wa.me/601111132028?text=Hi" target="_blank">English</a>
+            </div>
+        </div>
+        
         <!-- Business Hours Section -->
         <div class="business-hours" id="business-hours">
             <h2>Today’s business hours</h2>
@@ -233,7 +293,7 @@
         <!-- Modal -->
         <div id="modal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+              
                 <h2>Weekly Business Hours</h2>
                 <div class="weekly-hours">
                     <p class="day-time">Monday:    9:00 AM - 6:00 PM</p>
@@ -369,6 +429,21 @@
 
         // Initialize
         loadBusinessHours();
+        
+             document.getElementById('whatsapp').addEventListener('click', function() {
+            document.getElementById('language-modal').style.display = 'block';
+        });
+
+        document.querySelector('.language-modal .close').addEventListener('click', function() {
+            document.getElementById('language-modal').style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == document.getElementById('language-modal')) {
+                document.getElementById('language-modal').style.display = 'none';
+            }
+        });
+        
     </script>
 </body>
 </html>
